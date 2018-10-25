@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+    <!--Assets styleSheet-->
+    <link rel="stylesheet" href="assets/theme/css/select2.min.css" />
+    <link rel="stylesheet" href="assets/theme/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://bootswatch.com/4/materia/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/theme/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/3th-lib/toast/jquery.toast.min.css">
+    <link rel="stylesheet" href="assets/3th-lib/fullcalendar/fullcalendar.min.css">
+    <!--MyPlan styleSheet-->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>My plan</title>
+</head>
+
+<body>
+    <header class="py-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-4 text-center">
+                            <h1>
+                                My plan
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <aside class="col-3">
+                <div class="my-3">
+                    <button class="btn btn-success btn-create" data-toggle="modal" data-target="#create-note">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Create new note
+                    </button>
+                </div>
+
+                <div class="my-3">
+                    <button class="btn btn-info btn-create" data-toggle="modal" data-target="#create-tag">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Create new tag
+                    </button>
+                </div>
+
+                <div class="my-3">
+                    <form name="choose-date">
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-2 col-form-label">From</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" name="from-date" autofocus required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-2 col-form-label">To</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" name="to-date" autofocus required>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">Filter</button>
+                        </div>
+                        <hr class="mt-5">
+                        <div class="text-left">
+                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#full-calender" ><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </aside>
+
+            <!--Note List-->
+            <section class="col-9" id="group-note">
+                <!-- <div class="row justify-content-center">
+                    <h3>Group 1</h3>
+                    <div class="col-12">
+                        <ul class="list-group list-group-flush list-group-item-action" id="list-note-render">
+                            <li class="list-group-item list-group-item-action">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        <span>mô tả 1</span>
+                                    </label>
+                                    <div>
+                                        <span class="badge badge-danger">Priority: high</span>
+                                    </div>
+                                    <div class="badge-note">
+                                        <span class="badge badge-pill badge-secondary">secondary</span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div> -->
+
+            </section>
+            <!--Note List-->
+        </div>
+    </div>
+
+    <footer>
+    
+    </footer>
+
+    <!--Modal note-->
+    <div class="modal fade" id="create-note" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form name="create-note">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Create note</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-2 col-form-label">Title</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="title" placeholder="Title" autofocus
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-2 col-form-label">Description</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="description" placeholder="Description"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Tag</label>
+                            <div class="col-sm-10">
+                                <select class="select-multiple" name="tag[]" multiple="multiple" id="select-tag-create"
+                                    required>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-2 col-form-label">Date</label>
+                            <div class="col-sm-5">
+                                <input type="date" class="form-control" name="date" placeholder="date" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-2 col-form-label">Estimate</label>
+                            <div class="col-sm-5">
+                                <input type="number" class="form-control" name="estimate" placeholder="Estimate" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Priority</label>
+                            <div class="col-sm-10">
+                                <select class="custom-select" name="priority" required>
+                                    <option value="1" selected>Low</option>
+                                    <option value="2">Medium</option>
+                                    <option value="3">High</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">OK</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Modal note-->
+
+    <!--Modal tag-->
+    <div class="modal fade" id="create-tag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form name="create-tag">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Create tag</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="name-tag" class="col-sm-2 col-form-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="name-tag" placeholder="Name" autofocus
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="description-tag" class="col-sm-2 col-form-label">Description</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" name="description-tag" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">OK</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Modal tag-->
+
+    <!--Modal tag-->
+    <div class="modal fade" id="update-tag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form name="update-tag">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Update tag</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="name-tag" class="col-sm-2 col-form-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="name-tag-update" placeholder="Name"
+                                    autofocus required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="description-tag" class="col-sm-2 col-form-label">Description</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" name="description-tag-update" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">OK</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Modal tag-->
+
+    <!--Modal note-->
+    <div class="modal fade" id="update-note" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form name="update-note">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Update note</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-2 col-form-label">Title</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="title-update" placeholder="Title"
+                                    autofocus required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-2 col-form-label">Description</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="description-update" placeholder="Description"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-2 col-form-label">Date</label>
+                            <div class="col-sm-5">
+                                <input type="date" class="form-control" name="date-update" placeholder="date" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-2 col-form-label">Working</label>
+                            <div class="col-sm-5">
+                                <input type="number" class="form-control" name="working-update" placeholder="Working"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Priority</label>
+                            <div class="col-sm-10">
+                                <select class="custom-select" name="priority-update" required>
+                                    <option value="1" selected>Low</option>
+                                    <option value="2">Medium</option>
+                                    <option value="3">High</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">OK</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Modal note-->
+
+
+    <!--Modal note-->
+    <div class="modal fade" id="delete-note" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <form name="delete-note">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete note</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Bạn có muốn xóa ghi chú này không?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">OK</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Modal note-->
+
+    <!--Modal note-->
+    <div class="modal fade" id="full-calender" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form name="full-calender">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Update note</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+    
+                    <div class="modal-body">
+                        <div id='calendar'></div>
+                    </div>
+    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Assets script-->
+    <script src="assets/theme/js/jquery-3.3.1.min.js"></script>
+    <script src="assets/theme/js/popper.min.js"></script>
+    <script src="assets/theme/js/bootstrap.min.js"></script>
+    <script src="assets/theme/js/select2.min.js"></script>
+
+    <!--3th lib-->
+    <script src="assets/3th-lib/toast/jquery.toast.min.js"></script>
+    <script src="assets/3th-lib/moment/moment.js"></script>
+    <script src="assets/3th-lib/fullcalendar/fullcalendar.min.js"></script>
+
+    <script src="assets/extensions/Date.js"></script>
+
+    <!--MyPlan script-->
+    <script src="assets/js/dumpdata.js"></script>
+    <script src="assets/js/myscript.js"></script>
+
+    <!--Lib-->
+    <script src="assets/lib/MyClientApi.js"></script>
+    <script src="assets/lib/MyFactory.js"></script>
+
+    <!--Controller-->
+    <script src="assets/controller/note.js"></script>
+</body>
+
+</html>
