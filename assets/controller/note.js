@@ -2,6 +2,7 @@ let formCreateNote = $('form[name="create-note"]');
 let fromCreateTag = $('form[name="create-tag"]');
 let fromChooseDate = $('form[name="choose-date"]');
 let tags = {};
+let tempNotes = [];
 
 getTags();
 getNotes();
@@ -61,6 +62,8 @@ function getNotes() {
 
             attachEvent();
             showCalendar(res.data);
+            
+            tempNotes = [...res.data];
         }
     });
 }
@@ -130,8 +133,8 @@ fromChooseDate.submit(function(event){
 
     let fromDate = new Date($('input[name="from-date"]').val());
     let toDate = new Date($('input[name="to-date"]').val());
-    let tempCurrentDate = new Date();
-    let numAdd = new Date(toDate - fromDate).getDate() - 1;
+    let tempCurrentDate = new Date(fromDate);
+    let numAdd = new Date(toDate - fromDate).getDate() -1;
     let keysGenerator = [tempCurrentDate.toString()];
 
     for (let i = 0; i < numAdd; i++) {
@@ -322,13 +325,13 @@ function renderSpecificNote(note) {
         }
     }
 
-    let persent = ((note.working / note.estimate)*100) > 100 ? 100 : ((note.working / note.estimate)*100);
+    let persent = Math.round(((note.working / note.estimate)*100) > 100 ? 100 : ((note.working / note.estimate)*100) * 100) / 100 ;
     return (`
         <li class="list-group-item list-group-item-action">
             <div class="row">
                 <div class="col-sm-8">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" ${note.finished && 'checked' || ''} value="" id="note-${note.id}" data-id="${note.id}">
+                        ${persent !== 100 && `<input class="form-check-input" type="checkbox" ${note.finished && 'checked' || ''} value="" id="note-${note.id}" data-id="${note.id}">` || ``}
                         <label class="form-check-label" for="note-${note.id}" style="${note.finished && 'text-decoration: line-through;' || ''}">
                             <div>${note.title}</div>
                             <div>${note.description}</div>
@@ -341,6 +344,8 @@ function renderSpecificNote(note) {
                                     ${persent}% Complete (success)
                                 </div>
                             </div>
+                            <span style="margin-right:5px;">Estimate: ${note.estimate}</span>
+                            <span style="margin-right:5px;">Working: ${note.working}</span>
                         </div>
                         <div>
                             <span class="badge badge-${priority[note.priority].class}">Priority: ${priority[note.priority].text}</span>
@@ -405,13 +410,19 @@ function showCalendar(notes){
             id:'',
             title: '',
             start: '',
-            end: ''
+            end: '',
+            backgroundColor: '',
+            textColor: '',
+            borderColor: ''
         };
 
         event['id'] = item.id;
         event['title'] = item.title;
         event['start'] = item.forDate;
         event['end'] = item.forDate;
+        event['backgroundColor'] = item.finished ? '#e51c23' : item.estimate <= item.working ? '#ff9800' : '#50b154';
+        event['textColor'] = '#fff';
+        event['borderColor'] = '#fff';
 
         events.push(event);
     });
@@ -432,4 +443,46 @@ function showCalendar(notes){
         }
     });
 }
+
+$('#chart').on('shown.bs.modal', function(){
+    getSatistics();
+});
+
+$('#full-calendar').on('shown.bs.modal', function(){
+    showCalendar(tempNotes);
+});
+
+getSatistics();
+
+function getSatistics(){
+    MyFactory.GET(API.STATISTICS.GET).then(res => {
+        if(res.success){
+            let ctx = document.getElementById('myChart').getContext('2d');
+            let options = {
+                responsive: true
+            };
+            
+            let chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: 'doughnut',
+            
+                // The data for our dataset
+                data: {
+                    labels: ["Finished", "Working", "Cancel"],
+                    datasets: [{
+                        label: "My First dataset",
+                        backgroundColor: ["#50b154", "#ff9800", "#e51c23"],
+                        borderColor: ["#50b154", "#ff9800", "#e51c23"],
+                        data: [res.data['finished'], res.data['working'], res.data['cancel']],
+                    }]
+                },
+            
+                // Configuration options go here
+                options,
+            });
+        }
+    });
+}
+
+
 

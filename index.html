@@ -71,8 +71,17 @@
                             <button type="submit" class="btn btn-success">Filter</button>
                         </div>
                         <hr class="mt-5">
-                        <div class="text-left">
-                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#full-calender" ><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#full-calendar" ><i class="fa fa-calendar" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#chart" ><i class="fa fa-line-chart" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -107,7 +116,7 @@
     </div>
 
     <footer>
-    
+     
     </footer>
 
     <!--Modal note-->
@@ -156,7 +165,7 @@
                         <div class="form-group row">
                             <label for="Description" class="col-sm-2 col-form-label">Estimate</label>
                             <div class="col-sm-5">
-                                <input type="number" class="form-control" name="estimate" placeholder="Estimate" required>
+                                <input type="number" step="0.5" class="form-control" name="estimate" placeholder="Estimate" required>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -294,7 +303,7 @@
                         <div class="form-group row">
                             <label for="Description" class="col-sm-2 col-form-label">Working</label>
                             <div class="col-sm-5">
-                                <input type="number" class="form-control" name="working-update" placeholder="Working"
+                                <input type="number" class="form-control" step="0.5" name="working-update" placeholder="Working"
                                     required>
                             </div>
                         </div>
@@ -347,13 +356,13 @@
     </div>
     <!--Modal note-->
 
-    <!--Modal note-->
-    <div class="modal fade" id="full-calender" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!--Modal calendar-->
+    <div class="modal fade" id="full-calendar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form name="full-calender">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Update note</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Callendar</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -361,6 +370,30 @@
     
                     <div class="modal-body">
                         <div id='calendar'></div>
+                    </div>
+    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal calendar-->
+    <div class="modal fade" id="chart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form name="chart">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Chart</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+    
+                    <div class="modal-body">
+                        <canvas id="myChart"></canvas>
                     </div>
     
                     <div class="modal-footer">
@@ -381,11 +414,11 @@
     <script src="assets/3th-lib/toast/jquery.toast.min.js"></script>
     <script src="assets/3th-lib/moment/moment.js"></script>
     <script src="assets/3th-lib/fullcalendar/fullcalendar.min.js"></script>
+    <script src="assets/3th-lib/chartjs/Chart.min.js"></script>
 
     <script src="assets/extensions/Date.js"></script>
 
     <!--MyPlan script-->
-    <script src="assets/js/dumpdata.js"></script>
     <script src="assets/js/myscript.js"></script>
 
     <!--Lib-->

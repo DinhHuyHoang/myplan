@@ -43,6 +43,9 @@
         case "deleteNote":
             deleteNote($_GET["id"]);
             break;
+        case "statistics":
+            statistics();
+            break;
     }
 
     function getNotes(){
@@ -225,7 +228,7 @@
         $date = getdate(date("U"));
         $currentDate = "$date[year]-$date[mon]-$date[mday]";
         $sql = $conn->prepare("INSERT INTO `note`(`title`, `description`, `priority`, `estimate`, `for_date`, `created`) VALUES (?,?,?,?,?,?)");
-        $sql->bind_param("ssiiss", $note['title'], $note['description'], $note['priority'], $note['estimate'], $note["forDate"],$currentDate);
+        $sql->bind_param("ssidss", $note['title'], $note['description'], $note['priority'], $note['estimate'], $note["forDate"],$currentDate);
         $result = $sql->execute();
 
         if ($sql->affected_rows > 0) {
@@ -357,7 +360,7 @@
         $date = getdate(date("U"));
         $currentDate = "$date[year]-$date[mon]-$date[mday]";
         $sql = $conn->prepare("UPDATE `note` SET `title` = ?,  `description` = ?, `priority` = ?, `working` = ?, `for_date` = ?, `updated` = ? WHERE `id` = ?");
-        $sql->bind_param("ssiissi", $note['title'], $note['description'], $note['priority'], $note['working'], $note['forDate'], $currentDate, $note['id']);
+        $sql->bind_param("ssidssi", $note['title'], $note['description'], $note['priority'], $note['working'], $note['forDate'], $currentDate, $note['id']);
         $sql->execute();
         $data = [];
 
@@ -463,6 +466,36 @@
             );
         }
     
+        echo json_encode($data[0], JSON_UNESCAPED_UNICODE);
+        $conn->close();
+    }
+
+    function statistics(){
+        $conn = getConnection();
+
+        $sqlCancel = "SELECT COUNT(id) as cancel FROM `note` WHERE finished = 1";
+        $resultCancel = $conn->query($sqlCancel);
+        // $sqlCancel->execute();
+
+        $sqlWorking = "SELECT COUNT(id) as working FROM `note` WHERE working < estimate";
+        $resultWorking = $conn->query($sqlWorking);
+
+        $sqlFinished= "SELECT COUNT(id) as finished FROM `note` WHERE working >= estimate";
+        $resultFinished = $conn->query($sqlFinished);
+
+        // print_r($resultCancel->fetch_assoc()["cancel"]);
+        // print_r($resultWorking->fetch_assoc()["working"]);
+
+        $data[] = array(
+            "success" => true,
+            "msg" => "Delete successfully!",
+            "data" => array(
+                "cancel" => $resultCancel->fetch_assoc()["cancel"],
+                "working" => $resultWorking->fetch_assoc()["working"],
+                "finished" => $resultFinished->fetch_assoc()["finished"]
+            )
+        );
+
         echo json_encode($data[0], JSON_UNESCAPED_UNICODE);
         $conn->close();
     }

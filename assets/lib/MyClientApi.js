@@ -15,5 +15,8 @@ let API = {
         GET: host + 'api/note.php?act=getTags',
         CREATE: host + 'api/note.php?act=createTag',
         UPDATE: host + 'api/note.php?act=updateTag',
+    },
+    STATISTICS: {
+        GET: host + 'api/note.php?act=statistics'
     }
 }
