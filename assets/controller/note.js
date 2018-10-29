@@ -49,9 +49,9 @@ function getNotes() {
     }
 
     MyFactory.GET(API.NOTE.GET_SPECIFIC + `&from=${prevDate.minusDays(num).toString()}&to=${currentDate.addDays(num).toString()}`).then(res => {
+        let noteBlock = $('#group-note');
+        let notes = groupByDate(keysGenerator, res.data);
         if (res.success) {
-            let noteBlock = $('#group-note');
-            let notes = groupByDate(keysGenerator, res.data);
             //let length = Object.keys(obj).length;
             noteBlock.empty();
             noteBlock.append(renderNotes(notes));
@@ -61,8 +61,14 @@ function getNotes() {
             });
 
             attachEvent();
+        }else{
+            noteBlock.empty();
+        }
+    });
+
+    MyFactory.GET(API.NOTE.GET).then(res => {
+        if(res.success){
             showCalendar(res.data);
-            
             tempNotes = [...res.data];
         }
     });
@@ -325,6 +331,8 @@ function renderSpecificNote(note) {
         }
     }
 
+    $('[name="working-update"]').attr('max', note.estimate);
+
     let persent = Math.round(((note.working / note.estimate)*100) > 100 ? 100 : ((note.working / note.estimate)*100) * 100) / 100 ;
     return (`
         <li class="list-group-item list-group-item-action">
@@ -420,7 +428,7 @@ function showCalendar(notes){
         event['title'] = item.title;
         event['start'] = item.forDate;
         event['end'] = item.forDate;
-        event['backgroundColor'] = item.finished ? '#e51c23' : item.estimate <= item.working ? '#ff9800' : '#50b154';
+        event['backgroundColor'] = item.finished === 1 ? '#e51c23' : item.estimate >= item.working ? '#ff9800' : '#50b154';
         event['textColor'] = '#fff';
         event['borderColor'] = '#fff';
 
@@ -450,6 +458,11 @@ $('#chart').on('shown.bs.modal', function(){
 
 $('#full-calendar').on('shown.bs.modal', function(){
     showCalendar(tempNotes);
+});
+
+$('#create-note').on('hide.bs.modal', function(){
+    formCreateNote.trigger("reset");
+    $('#select-tag-create').val(null).trigger('change');
 });
 
 getSatistics();
@@ -483,6 +496,3 @@ function getSatistics(){
         }
     });
 }
-
-
-

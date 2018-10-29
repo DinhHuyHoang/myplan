@@ -50,16 +50,13 @@
 
     function getNotes(){
         $conn = getConnection();
-        $sql = "SELECT * FROM `note` WHERE status = 1 ORDER BY `created` DESC";
+        $sql = "SELECT * FROM `note` WHERE status = 1 ORDER BY `for_date` DESC";
         $result = $conn->query($sql);
         $response = [];
     
-        if (!$result) {
-            trigger_error('Invalid query: ' . $conn->error);
-        }
-    
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
+               $tags = getTagByNoteId($row["id"]);
                $temp[] = array(
                    "id" => $row["id"], 
                    "title" => $row["title"],
@@ -69,16 +66,20 @@
                    "working" => $row["working"],
                    "finished" => $row["finished"],
                    "status" => $row["status"],
+                   "forDate" => $row["for_date"],
                    "created" => $row["created"],
-                   "updated" => $row["updated"]
+                   "updated" => $row["updated"],
+                   "tags" => array($tags)
                 );
-
-                $temp["tags"] = $tags;
             }
 
             $response["success"] = true;
             $response["msg"] = 'true';
             $response["data"] = $temp;
+        } else {
+            $response["success"] = false;
+            $response["msg"] = 'Invaild!';
+            $response["data"] = [];
         }
 
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
@@ -179,7 +180,7 @@
         $toDate = empty($toDate) ? $currentDate : $toDate;
         $fromDate = empty($fromDate) ? $currentDate : $fromDate;
         
-        $sql = $conn->prepare("SELECT * FROM `note` WHERE status = 1 AND created BETWEEN ? AND ? ORDER BY `created` DESC");
+        $sql = $conn->prepare("SELECT * FROM `note` WHERE status = 1 AND for_date BETWEEN ? AND ? ORDER BY `for_date` DESC");
         $sql->bind_param('ss', $fromDate, $toDate);
         $sql->execute();
         $result = $sql->get_result();
